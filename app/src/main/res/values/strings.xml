@@ -2,4 +2,7 @@
     <string name="app_name">NFC Read Write</string>
     <string name="action_settings">Settings</string>
     <string name="title">Hello World NFC!</string>
+    <string name="write">Write</string>
+    <string name="message">message</string>
+    <string name="write_a_message">Write a message:</string>
 </resources>
