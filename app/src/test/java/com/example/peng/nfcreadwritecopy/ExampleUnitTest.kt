@@ -1,4 +1,4 @@
-package com.example.peng.nfcreadwrite
+package com.example.peng.nfcreadwritecopy
 
 import org.junit.Assert
 import org.junit.Test

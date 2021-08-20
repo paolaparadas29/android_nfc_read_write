@@ -1,4 +1,4 @@
-package com.example.peng.nfcreadwrite
+package com.example.peng.nfcreadwritecopy
 
 import android.app.Activity
 import android.app.PendingIntent
@@ -6,23 +6,22 @@ import android.content.Context
 import android.content.IntentFilter
 import android.widget.TextView
 import android.os.Bundle
-import com.example.peng.nfcreadwrite.R
 import android.widget.Toast
-import com.example.peng.nfcreadwrite.MainActivity
 import android.content.Intent
 import android.nfc.*
-import android.os.Parcelable
 import kotlin.Throws
 import android.nfc.tech.Ndef
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import com.example.peng.nfcreadwritecopy.R
 import java.io.IOException
 import java.io.UnsupportedEncodingException
 import kotlin.experimental.and
-import android.R.string.no
 
-
+import com.example.peng.nfcreadwritecopy.databinding.ActivityMainBinding
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 
 class MainActivity : Activity() {
@@ -35,9 +34,15 @@ class MainActivity : Activity() {
     var tvNFCContent: TextView? = null
     var message: TextView? = null
     var btnWrite: Button? = null
+    private lateinit var binding : ActivityMainBinding
+    private lateinit var database : DatabaseReference
+
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         context = this
         tvNFCContent = findViewById<View>(R.id.nfc_contents) as TextView
         message = findViewById<View>(R.id.edit_message) as TextView
@@ -111,6 +116,23 @@ class MainActivity : Activity() {
             Log.e("UnsupportedEncoding", e.toString())
         }
         tvNFCContent!!.text = "NFC Content: $text"
+
+        binding.scanstore.setOnClickListener {
+
+        val userName = binding.userName.text.toString()
+        database = FirebaseDatabase.getInstance().getReference("Users")
+        val User = User(text)
+        database.child(userName).setValue(User).addOnSuccessListener {
+       // database.child(text).setValue(User).addOnSuccessListener {
+            binding.userName.text.clear()
+
+            Toast.makeText(this,"Successfully Saved",Toast.LENGTH_SHORT).show()
+
+        }.addOnFailureListener{
+
+            Toast.makeText(this,"Failed",Toast.LENGTH_SHORT).show()
+        }
+    }
     }
 
     /******************************************************************************
